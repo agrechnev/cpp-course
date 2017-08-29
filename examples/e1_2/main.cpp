@@ -106,7 +106,7 @@ int main(int argc, char **argv){
     warriors.emplace_back("Jaheira", "Club+5", 110); // Construct in-place. Best !
     Warrior wz("Zoe Maya Castillo", "Fists", 20);
     warriors.push_back(wz); // OOPS! A copy operation!
-    warriors.push_back(move(Warrior("Casca", "Sword", 24))); // move operation : a bit better !
+    warriors.push_back(Warrior("Casca", "Sword", 24)); // move operation : a bit better !
 
     cout << endl;
     cout << "WARRIORS (range for loop):" << endl;
