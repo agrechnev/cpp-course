@@ -14,7 +14,7 @@ cmake ..
 
 cmake --build .
 
-If using MinGW, you will need to specify CMake the generator for gcc
+If using MinGW, you will need to specify the CMake generator for gcc
 
 mkdir build
 
