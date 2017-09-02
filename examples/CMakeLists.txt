@@ -10,3 +10,7 @@ set(CMAKE_CXX_STANDARD 14)
 # Build all examples, each one is a separate sub-project in a subdirectory
 add_subdirectory(e1_1)
 add_subdirectory(e1_2)
+
+add_subdirectory(e2_1)
+
+add_subdirectory(e4_1)

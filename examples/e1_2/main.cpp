@@ -7,6 +7,7 @@
 // Header vector (class std::vector)
 #include <vector>
 // Header string (class std::string)
+#include <string>
 
 // This is the global scope. Functions, classes, global data can be declared here.
 
