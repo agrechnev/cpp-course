@@ -12,5 +12,7 @@ add_subdirectory(e1_1)
 add_subdirectory(e1_2)
 
 add_subdirectory(e2_1)
+add_subdirectory(e2_2)
+add_subdirectory(e2_3)
 
 add_subdirectory(e4_1)
