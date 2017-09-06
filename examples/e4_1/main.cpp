@@ -12,7 +12,7 @@ int main(){
         cout << "Initialization :" << endl;
         Tjej t1; //Default ctor: Lilith
         
-        // These 4 forms of initialization are more or less equivalent (unless use std::initializer_list)
+        // These 5 forms of initialization are more or less equivalent (unless use std::initializer_list)
         Tjej t2("Kajsa");
         Tjej t3 = Tjej("Anna");  // No copy/move here ! And no assignment !
         Tjej t4{"Maria"};

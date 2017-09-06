@@ -111,10 +111,11 @@ int main(){
     {
         cout << "Loops : good style" << endl;
         int i;
+        // Infinite loop
         for (;;) {
             cout << "Enter a number (0 = exit) :" << endl;
             cin >> i;
-            if (0 == i)
+            if (0 == i)  // break in the MIDDLE of the loop
                 break;
             cout << i << " * 2 = " << i*2 << endl;
         }
