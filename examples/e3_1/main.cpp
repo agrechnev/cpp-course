@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <array>
 
 /*
   C language headers in C++ start with 'c'. For example
@@ -17,6 +18,34 @@ using namespace std;
 
 //=========================
 int main() {
+    {
+        cout << "const, constexpr modifiers : \n\n\n";
+
+        const int a = 17;
+        // a = 19; // Error
+        // const int b; // Error : no initialization
+
+        auto c = a; // c is int, auto ignores const
+        c = 12; // OK
+        decltype(auto) d = a; // d is const int
+//        d = 13; // Error
+
+        using CULL = const unsigned long long; // const in a type declaration
+        CULL e = 1001; // e is const unsigned long long
+
+        cout << "a = " << a << ", e = " << e << endl;
+
+        array<const int, 4> cia{4, 3, 2, 1};   // const in a template argument
+
+        // constexpr is a compile-time const, literal types only
+        constexpr int SIZE = 18;
+        static_assert(SIZE == 18);  // Compile-time check
+        constexpr const char * NAME = "Lucifer";  // Type const char *
+        int cArray[SIZE];  // C Array
+        array<int, SIZE> cppArray; // C++ ARray class
+    }
+
+
     {
         cout << "References 1 : \n\n" << endl;
 
@@ -40,6 +69,18 @@ int main() {
         cout << "a = " << a << ", b = " << b << ", c = " << c << ", d = " << d << endl;
 
         //d = 17;  // We cannot do that, d is a const int &
+
+        // Difference between auto and decltype(auto)
+        auto x = d;  // x is int, auto ignores both ref and const
+        x = 11; // OK, and a, c, d are not changed
+        decltype(auto) y = c; // y is ref to a
+
+        cout << "Now we change y to 100 \n";
+        y = 100; // Changes a, c, d
+        decltype(auto) z = d; // y is const ref to a
+        // z = 200; // Error
+
+        cout << "a = " << a << ", b = " << b << ", c = " << c << ", d = " << d << endl;
     }
 
     {
