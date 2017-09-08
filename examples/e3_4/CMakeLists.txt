@@ -8,7 +8,8 @@ project(e3_4)
 set(CMAKE_CXX_STANDARD 14)
 
 # Source files
-set(SRCS 
+set(SRCS
+    myfile.h myfile.cpp
     main.cpp
 )
 

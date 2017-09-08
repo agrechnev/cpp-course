@@ -8,65 +8,68 @@
 using namespace std;
 
 /// The tag() function prints the namespace it's in
-void tag() {cout << "::" << endl;}
+void tag() { cout << "::" << endl; }
 //---------
 namespace B {
-void tag() {cout << "::B" << endl;}
+    void tag() { cout << "::B" << endl; }
 
-const string bStr = "::B";
-const string str = "::B";
+    const string bStr = "::B";
+    const string str = "::B";
 
 } // ::B
 //---------
 namespace C {
-void tag() {cout << "::C" << endl;}
+    void tag() { cout << "::C" << endl; }
 
-const string cStr = "::C";
-const string str = "::C";
+    const string cStr = "::C";
+    const string str = "::C";
 
 } // ::C
 //---------
 namespace A {
 
-const string aStr = "::A";
-const string str = "::A";
-namespace Z {
-void tag() {cout << "::A::Z" << endl;}
-} // A::Z
+    const string aStr = "::A";
+    const string str = "::A";
+    namespace Z {
+        void tag() { cout << "::A::Z" << endl; }
+    } // A::Z
 
-void tag() {cout << "::A" << endl;}
-namespace A {
-void tag() {cout << "::A::A" << endl;}
-namespace X {
-void tag() {cout << "::A::A::X" << endl;}
-namespace A {
-void tag() {cout << "::A::A::X::A" << endl;}
-} // A::A::X::A
-namespace B {
-void tag() {cout << "::A::A::X::B" << endl;}
-} // A::A::X::B
+    void tag() { cout << "::A" << endl; }
 
-// We are in ::A::A::X, calling stuff from a position deep in namespaces
-void fun(){
-    tag();  //::A::A::X
-    A::tag();  // ::A::A::X::A
-    ::tag();  // ::
-    ::A::tag();  // ::A
-    ::A::A::tag();  // ::A::A
+    namespace A {
+        void tag() { cout << "::A::A" << endl; }
 
-    B::tag(); //::A::A::X::B
-    ::B::tag(); //::B
+        namespace X {
+            void tag() { cout << "::A::A::X" << endl; }
 
-    Z::tag(); // ::A::Z
-}
+            namespace A {
+                void tag() { cout << "::A::A::X::A" << endl; }
+            } // A::A::X::A
+            namespace B {
+                void tag() { cout << "::A::A::X::B" << endl; }
+            } // A::A::X::B
 
-} // ::A::A::X
-} // ::A::A
+            // We are in ::A::A::X, calling stuff from a position deep in namespaces
+            void fun() {
+                tag();  //::A::A::X
+                A::tag();  // ::A::A::X::A
+                ::tag();  // ::
+                ::A::tag();  // ::A
+                ::A::A::tag();  // ::A::A
+
+                B::tag(); //::A::A::X::B
+                ::B::tag(); //::B
+
+                Z::tag(); // ::A::Z
+            }
+
+        } // ::A::A::X
+    } // ::A::A
 } // ::A
 
 // Anonymous namespace
-namespace{
-    void anon(){
+namespace {
+    void anon() {
         cout << "Anonymous namespace" << endl;
     }
 }
