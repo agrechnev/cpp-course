@@ -8,10 +8,11 @@ project(e4_1)
 set(CMAKE_CXX_STANDARD 14)
 
 # Source files
-set(SRCS 
-    Tjej.h
-    main.cpp
-)
+set(SRCS
+        Tjej.h
+        Warrior.cpp Warrior.h
+        main.cpp
+        )
 
 #  Executable created from ${SRCS}
 add_executable(${PROJECT_NAME} ${SRCS})

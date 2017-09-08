@@ -50,7 +50,18 @@ public:
         return *this;
     }
 
+    /// Getter
+    const std::string &getName() const {
+        return name;
+    }
+
+    /// Setter
+    void setName(const std::string &name) {
+        Tjej::name = name;
+    }
+
 private:
+    /// Field wiith a default value
     std::string name = "Lilith";
 };
 
