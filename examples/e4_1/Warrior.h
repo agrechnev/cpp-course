@@ -11,6 +11,9 @@ namespace MyNS {
     /// A demo class with 3 fields, here I use both h and cpp
     /// Every method is declared here, defined in Warrior.cpp
     class Warrior {
+    public: //====== Consts
+        static constexpr int WARRIOR_CONST = 1001;
+
     public: //====== Methods
         /// Ctor
         explicit Warrior(const std::string &name, const std::string &weapon, int age);
@@ -19,7 +22,7 @@ namespace MyNS {
         Warrior() = default;
 
         /// A class method
-        void within(int year);
+        void within(int year) const;
 
         /// Getters and Setters
         const std::string &getName() const;  // Implemented in CPP
@@ -42,14 +45,19 @@ namespace MyNS {
             Warrior::age = age;
         }
 
+        /// A static function
+        static void printWarriorCount();
 
         /// A friend function: print the warrior
         friend void printWarrior(const Warrior & w);
 
-    private: //===== Data
+    private: //===== Fields
         std::string name{"noname"};  // Cannot use ("noname") , but {} work just fine
         std::string weapon = "noweapon"; // Or like this
         int age = -1;
+
+        /// A static field, must be defined in Warrior.cpp !!!
+        static int warriorCount;
     };  // Warrior class
 
     /// Compilers often don't care, but friend declaration inside a class is not a real declaration

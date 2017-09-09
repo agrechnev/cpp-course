@@ -15,12 +15,19 @@ int main(){
         cout << "\nWarrior : \n\n";
 
         // Create a warrior
-        Warrior w0;  // Default constructor, rather stupid
+        Warrior w0;  // Default constructor, rather stupid, does not increase the count
         Warrior w1("Maria Traydor", "Gun", 19);
         Warrior w2{"Sophia Esteed", "Staff", 19};
-        Warrior w3("Nel Zelpher", "Knives", 23);
+        Warrior w3 = Warrior("Nel Zelpher", "Knives", 23);
+        Warrior w4("Clair Lasbard", "Knives", 25);
 
         w1.within(2300);  // Call a class method
+    }
+
+    {
+        cout << "\nWarrior : Static demo \n\n";
+
+        Warrior::printWarriorCount();
     }
 
 

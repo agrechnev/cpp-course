@@ -1,5 +1,7 @@
 // Created by Oleksiy Grechnyev 2017
 
+#pragma once
+
 #include <string>
 
 // ctor = Constructor, dtor = Destructor
