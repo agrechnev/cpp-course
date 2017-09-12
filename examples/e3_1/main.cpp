@@ -39,7 +39,7 @@ int main() {
 
         // constexpr is a compile-time const, literal types only
         constexpr int SIZE = 18;
-        static_assert(SIZE == 18);  // Compile-time check
+        static_assert(SIZE == 18, "Error ! Wrong size !!!");  // Compile-time check
         constexpr const char * NAME = "Lucifer";  // Type const char *
         int cArray[SIZE];  // C Array
         array<int, SIZE> cppArray; // C++ ARray class
