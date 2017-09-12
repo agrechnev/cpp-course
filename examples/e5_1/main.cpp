@@ -5,6 +5,19 @@
 #include <iomanip>
 #include <string>
 
+//==============================
+// This is a simple ostream impementation of printf
+// This one uses a fixed-size static buffer and
+// does not support e.g. C++ strings without .c_str()
+// Making a better one like Boost format() is much harder
+template <typename...  Params>
+void print(std::ostream & os, const std::string & fmt, Params... p) {
+    constexpr size_t SIZE = 1000;
+    static char buffer[SIZE];  // Hidden global buffer = ugly
+    std::snprintf(buffer, SIZE, fmt.c_str(), p...);
+    os << buffer;
+}
+//==============================
 int main(){
     using namespace std;
     /*{
@@ -58,6 +71,12 @@ int main(){
         // unitbuf = flush buffer after each write
         // uppercase (does NOT affect char/string !)
         cout << "uppercase: "<< 1.e30  << " "<< uppercase << 1.e30 << nouppercase << endl;
+    }
+
+    {
+        cout << "print() : ostream version of printf() " << endl;
+
+        print(cout, "8.1 = %10.13lf , 9 = %d \n", 8.1, 9);
     }
 
     return 0;
