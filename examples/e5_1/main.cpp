@@ -2,6 +2,7 @@
 // Created by Oleksiy Grechnyev 2017
 
 #include <iostream>
+#include <sstream>
 #include <iomanip>
 #include <string>
 
@@ -21,7 +22,7 @@ void print(std::ostream & os, const std::string & fmt, Params... p) {
 int main(){
     using namespace std;
     /*{
-        cout << "Elementary use of cin, cout, cerr :" << endl;
+        cout << "\nElementary use of cin, cout, cerr :\n\n";
 
         int a = 3;
         int b = 7;
@@ -56,7 +57,7 @@ int main(){
     }*/
 
     {
-        cout << "ostream manipulators : \n";
+        cout << "\nostream manipulators : \n\n";
 
         cout << "Flags : " << endl;
         // (no)boolalpha
@@ -74,7 +75,57 @@ int main(){
     }
 
     {
-        cout << "print() : ostream version of printf() " << endl;
+        cout << "\nString streams : \n\n";
+
+        istringstream iss("13.98  17.32");
+        ostringstream oss;
+
+        double a, b;
+        iss >> a >> b;
+        oss << "a = " << a << " , b = " << b << " , a*b = " << a*b << endl;
+
+        // Now we want to reuse iss, we need clear() !!!
+        iss.str("3.0 7.0");  // Change the string in iss
+        iss.clear(); // To avoid failure on EOF !
+
+        iss >> a >> b;  // And read again
+        oss << "a = " << a << " , b = " << b << " , a*b = " << a*b << endl;
+
+        cout << "oss.str() = " << oss.str();  // Write the result
+    }
+
+    {
+        cout << "\nExceptions : \n\n";
+        istringstream in("Bla Bla !");
+        in.exceptions(ios::eofbit | ios::failbit | ios::badbit);
+        try {
+            int a;
+            in >> a;
+            // A famous bug in MinGW/ gcc. Which one will be caught in your version ?
+        } catch (const system_error &  e) {
+            cerr << "system_error caught !" << endl;
+            cerr << e. what() << endl;
+        } catch (const exception &  e) {
+            cerr << "exception caught !" << endl;
+            cerr << e. what() << endl;
+        }
+
+    }
+
+    {
+        cout << "\nUTF-8 output \n\n";
+
+        cout << "If you don't see right output in Windows, \n";
+        cout << "type 'chcp 65001' in the windows console" << endl;
+
+        cout << "Український текст із літерами ґҐ !"  << endl;
+        cout << "Svenska bokstäver ÅåÖöÄä !" << endl;
+        cout << "Hiragana :  あ , い , う , え , お " << endl;
+    }
+
+
+    {
+        cout << "\nprint() : ostream version of printf() \n\n";
 
         print(cout, "8.1 = %10.13lf , 9 = %d \n", 8.1, 9);
     }
