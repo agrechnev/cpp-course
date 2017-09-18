@@ -6,6 +6,8 @@
 #include "./Warrior.h"  // ./ is optional, but nice
 #include "Tjej.h"  // No ./ here
 
+Tjej glob("Globula Statika");
+
 int main(){
     using namespace std;
     using namespace MyNS;

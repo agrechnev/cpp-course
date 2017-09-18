@@ -21,7 +21,7 @@ void print(std::ostream & os, const std::string & fmt, Params... p) {
 //==============================
 int main(){
     using namespace std;
-    /*{
+    {
         cout << "\nElementary use of cin, cout, cerr :\n\n";
 
         int a = 3;
@@ -54,10 +54,26 @@ int main(){
 
         cout << "It's a good idea to read input streams with getline() !" << endl;
 
-    }*/
+    }
 
     {
-        cout << "\nostream manipulators : \n\n";
+        puts("\nC I/O : using printf(), scanf(), puts(), fgets() :\n");
+
+        puts("Enter a, b :"); // Print a string to stdout
+        double a, b;
+        scanf("%lf %lf", &a, &b); // Read a, b. Pointers !
+        getchar(); // Skip newline
+        printf(" %lf * %lf = %15.10lf\n", a, b, a*b); // Print stuff
+
+        constexpr size_t SIZE = 100;
+        char s[SIZE]; // Buffer for a C-string
+        puts("Your full name ?");
+        fgets(s, SIZE, stdin);
+        printf("Hello %s !!!\n", s);
+    }
+
+    {
+        cout << "\nManipulators 1 : \n\n";
 
         cout << "Flags : " << endl;
         // (no)boolalpha
@@ -72,6 +88,27 @@ int main(){
         // unitbuf = flush buffer after each write
         // uppercase (does NOT affect char/string !)
         cout << "uppercase: "<< 1.e30  << " "<< uppercase << 1.e30 << nouppercase << endl;
+
+        cout.precision(20);      // Set double precision
+        cout << setw(1) << 1 << setw(2) << 2 << setw(3) << 3 << setw(4) << 4
+             << setw(5) << 5 << setw(6) << 6 << endl;
+        cout << left << setfill('A') << setw(10) << 1
+             << setfill('B') << right << setw(10) << 2 << endl;
+        cout << scientific << uppercase << setfill('&') << setw(30) << 1.0/3 << endl;
+        cout << nouppercase  << defaultfloat;
+    }
+
+    {
+        cout << "\nManipulators 2 : \n\n";
+
+        int i = 45;
+        cout << "Dec : " << i << " " << showbase << i  << noshowbase << endl;
+        cout << "Oct : " << oct << i << " "  << showbase << i  << dec << noshowbase << endl;
+        cout << "Hex : " << hex << i << " "  << showbase << i  << dec << noshowbase << endl;
+        cout << "HEX : " << uppercase << hex << i << " "  << showbase << i  << dec
+             << noshowbase << nouppercase << endl;
+        // hexfloat is apparently broken in mingw !!!
+        //cout << "Hexfloat:" << hexfloat << 1.0/3 << defaultfloat << endl;
     }
 
     {
