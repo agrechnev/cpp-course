@@ -20,10 +20,9 @@ unique_ptr<Tjej> factory(const string & name){
 }
 //==============================
 // Sink (consumer) example which destroys a unique_ptr<Tjej> object
-// Note the rvalue ref unique_ptr<Tjej> && pT
-void sink(unique_ptr<Tjej> && pT){
-    unique_ptr<Tjej> pT2 = move(pT); // We can do that
-    cout << "Sink: name = " << pT2->getName() << endl;
+// Note the parameter BY VALUE unique_ptr<Tjej> pT
+void sink(unique_ptr<Tjej> pT){
+    cout << "Sink: name = " << pT->getName() << endl;
     // Now the object is destroyed as it goes out of scope !
 }
 //==============================
@@ -48,7 +47,8 @@ int main(){
 
     {
         cout << "\nunique_ptr example 2: Source (factory) and sink (consumer).  \n\n";
-        unique_ptr<Tjej> pT = factory("Souce of all magic");  // Create a new heap object owned by a unique PTR
+        // Create a new heap object owned by a unique PTR
+        unique_ptr<Tjej> pT = factory("Souce of all magic");
         cout << "name = " << pT->getName() << endl;
         // No we move pT to sink(), where it is destroyed
         sink(move(pT));
