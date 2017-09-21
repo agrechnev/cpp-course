@@ -35,3 +35,4 @@ add_subdirectory(e5_3)
 add_subdirectory(e5_4)
 
 add_subdirectory(e6_1)
+add_subdirectory(e6_2)

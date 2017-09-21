@@ -4,8 +4,8 @@
 
 
 #include <iostream>
-#include <iomanip>
 #include <string>
+#include <memory>
 
 #include "Tjej.h"
 
@@ -48,6 +48,9 @@ int main(){
         cout << "\nunique_ptr example 1:  \n\n";
         unique_ptr<Tjej> upT1 = make_unique<Tjej>("Maria Traydor");  // Create a new heap object owned by a unique upTR
         unique_ptr<Tjej> upT2(new Tjej("Tynave")); // This is also OK
+
+
+        cout << "sizeof(unique_ptr<Tjej>) = " << sizeof(unique_ptr<Tjej>) << endl;
 
         cout << "name1 = " << upT1->getName() << endl;  // You can access members like this
         cout << "name2 = " << (*upT2).getName() << endl;  // Or like this
