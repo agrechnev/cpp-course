@@ -13,14 +13,10 @@ struct DiamondException : public std::runtime_error{
 };
 
 // Or like this
-class SapphireException : public std::exception{
-public:
+struct SapphireException : public std::exception{
     const char * what() const noexcept override {
         return "Al2O3";
     }
-
-private:
-    std::string s;
 };
 
 
