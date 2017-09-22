@@ -32,7 +32,7 @@ unique_ptr<Tjej> factory2(const string & name){
 // Note the parameter BY VALUE unique_uupTr<Tjej> uupT
 void sink(unique_ptr<Tjej> upT){  // By value !!! NO ref ! MOVED here !
     cout << "Sink: name = " << upT->getName() << endl;
-    // Now upT and the heap object are destroyed as they go out of scope !
+    // Now upT and the managed object are destroyed as they go out of scope !
 }
 //==============================
 int main(){
@@ -75,14 +75,14 @@ int main(){
         // Release ownership and give a regular pointer
 
         cout << "About to clean up automatically :" << endl;
-        // Here all heap objects get destroyed by the unique_ptr destructor
+        // Here all managed objects get destroyed by the unique_ptr destructor
     }
 
     {
         cout << "\nunique_ptr example 2: Source (factory) and sink (consumer).  \n\n";
-        // Create a new heap object owned by a unique upTR
+        // Create a new heap object owned by a unique_ptr
         unique_ptr<Tjej> upT = factory2("Souce of all magic");
-        // We can use the heap object
+        // We can use the managed object
         cout << "name = " << upT->getName() << endl;
         // Now we move upT to sink(), where it is destroyed
         sink(move(upT));

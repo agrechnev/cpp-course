@@ -111,7 +111,7 @@ int main(){
         shared_ptr<Bear> sB2 = dynamic_pointer_cast<Bear>(sA);   // Checks. Safe.
         sB1->talk();
         sB2->talk();
-    }  // The heap object is deleted here
+    }  // The managed object is deleted here
 
 
     {
@@ -131,7 +131,7 @@ int main(){
             cout << "s->data = " << s->data << endl;
         } // s is destroyed here, s1, s2 are still alive
 
-    }  // s1, s2 die here and destroy the heap objects
+    }  // s1, s2 die here and delete the managed objects
 
     return 0;
 }
