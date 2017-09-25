@@ -24,6 +24,14 @@ void print(const C & c){
     cout << endl;
 }
 //==============================
+/// Print a container. This version uses iterators
+template <typename C>
+void print2(const C & c){
+    for (auto it = begin(c); it != end(c); ++it)
+        cout << *it << " ";
+    cout << endl;
+}
+//==============================
 // Get array size, template magic !
 // Works only with arrays, not pointers !!!
 // Uses const ref to array
@@ -56,6 +64,8 @@ int main(){
         print(a);  // Note that print receives a as a ref to array
         cout << "\nweapons = ";
         print(weapons);
+        cout << "\nweapons = ";
+        print2(weapons);   // print2 also works !
 
         // Implicitly convert array to pointer
         char * message = cString;
@@ -188,7 +198,6 @@ int main(){
 
         // Built-in array
         array<int[17], 3> aa;
-        a[1][2] = 666;
     }
 
     {
@@ -301,14 +310,10 @@ int main(){
 
         // Suppose we don't know A Priori that 16 goes before 64.
         // What can we do ? For arrays we can compare:
-        array<int, 12>::iterator it1, it2;
-        if (found16 <= found64) {
-            it1 = found16;
-            it2 = found64;
-        } else {
-            it1 = found64;
-            it2 = found16;
-        }
+        array<int, 12>::iterator it1 = found16, it2 = found64;
+        if (it1 > it2)         // Check the order !
+                swap(it1, it2);
+            
         // Now it1 < it2
         // Reverse the part from 16  to 64 inclusive
         // We need it2+1 to include 64 in the reverse !
@@ -318,5 +323,29 @@ int main(){
         cout << "aI1 = "; print(aI1);
     }
 
+    {
+        cout << "\n-----------------------------";
+        cout << "\nstd::array fill, copy, generate, for_each :  \n\n";
+        
+        array<int, 12> aI1;
+        fill(aI1.begin(), aI1.end(), 19); // Fill with the value 19
+        cout << "aI1 = "; print(aI1);
+        
+        array<int, 12> aI2 = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37};
+        array<int, 12> aI3;
+        
+        copy(aI2.begin(), aI2.end(), aI3.begin());   // Copy aI2 to aI3
+        cout << "aI3 = "; print(aI3);
+        
+        array<int, 12> aI4;
+        // Generate aI4
+        int n = 0;
+        generate(aI4.begin(), aI4.end(), [&n](){return n++;});
+        cout << "aI4 = "; print(aI4);
+        
+        for_each(aI4.begin(), aI4.end(), [](int &n){n*=3;});   // Multiply each element by 3
+        cout << "aI4 = "; print(aI4);
+    }
+    
     return 0;
 }
