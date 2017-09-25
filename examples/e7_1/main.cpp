@@ -278,9 +278,8 @@ int main(){
             aI1[i] = i*i;
         cout << "aI1 = "; print(aI1);
 
-        // Lets try find
+        // Lets try std::find()
         // We use non-const iterators to reverse later
-
         auto found16 = find(aI1.begin(), aI1.end(), 16);  // Returns iterator
         if (found16 == aI1.end() )
             cout << "16 not found !\n";
