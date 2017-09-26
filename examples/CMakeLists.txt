@@ -40,3 +40,4 @@ add_subdirectory(e6_3)
 
 add_subdirectory(e7_1)
 add_subdirectory(e7_2)
+add_subdirectory(e7_3)

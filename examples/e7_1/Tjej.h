@@ -14,21 +14,22 @@
 // Default copy/move ctors and assignments will be similar to mine
 class Tjej{
 public:
-    Tjej(){
+    Tjej() noexcept{
         std::cout << "Default ctor " << name << std::endl;
     }
 
     // No explicit here. But usually we make it explicit.
-    Tjej(const std::string & s) : name(s){
+    Tjej(const std::string & s) noexcept : name(s){
         std::cout << "Ctor " << name << std::endl;
     }
 
-    Tjej(const Tjej & rhs) : name(rhs.name){
+    Tjej(const Tjej & rhs) noexcept : name(rhs.name)  {
         std::cout << "Copy Ctor " << name << std::endl;
     }
 
     // Uses rvalue ref (Tjej &&) and std::move
-    Tjej(Tjej && rhs) : name(std::move(rhs.name)){
+    // Note : without noexcept vector would prefer copy Ctor !
+    Tjej(Tjej && rhs) noexcept : name(std::move(rhs.name)){
         std::cout << "Move Ctor " << name << std::endl;
     }
 
@@ -36,7 +37,7 @@ public:
         std::cout << "Dtor " << name << std::endl;
     }
     
-    Tjej & operator= (const Tjej & rhs) {
+    Tjej & operator= (const Tjej & rhs) noexcept {
         // Check for self-assignment
         if (this != &rhs) 
             name = rhs.name;
@@ -44,7 +45,7 @@ public:
         return *this;
     }
         
-    Tjej & operator= (Tjej && rhs) {
+    Tjej & operator= (Tjej && rhs) noexcept {
         // Check for self-assignment
         if (this != &rhs)
             name = std::move(rhs.name);
@@ -53,12 +54,12 @@ public:
     }
 
     /// Getter
-    const std::string &getName() const {
+    const std::string &getName() const noexcept {
         return name;
     }
 
     /// Setter
-    void setName(const std::string &name) {
+    void setName(const std::string &name) noexcept {
         Tjej::name = name;
     }
 
