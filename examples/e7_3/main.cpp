@@ -95,7 +95,17 @@ int main(){
         for (auto & p : m1)
             p.second += 1;
 
-        printMap(m1);
+        cout << "\n m1 = \n"; printMap(m1);
+
+        // Check for an element
+        cout << "m1.count(\"Nel Zelpher\") = " << m1.count("Nel Zelpher") << endl;
+
+        auto pos = m1.find("Peppita Rossetti");
+        m1.erase(pos);
+        m1.erase("Mirage Koas");
+        cout << "\n m1 = \n"; printMap(m1);
+
+        cout << "m1.size() = " << m1.size() << endl;
     }
 
 
