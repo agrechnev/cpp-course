@@ -41,3 +41,7 @@ add_subdirectory(e6_3)
 add_subdirectory(e7_1)
 add_subdirectory(e7_2)
 add_subdirectory(e7_3)
+
+add_subdirectory(e8_1)
+add_subdirectory(e8_2)
+add_subdirectory(e8_3)
