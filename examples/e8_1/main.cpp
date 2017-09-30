@@ -3,6 +3,8 @@
 
 #include <iostream>
 #include <string>
+#include <cctype>
+#include <algorithm>
 //==============================
 int main(){
     using namespace std;
@@ -36,15 +38,12 @@ int main(){
 
         string s8; // Empty string
 
+        string s9 = "Baron of Hell";   // Assignment, also works for implicit conversion
+        cout << "s9 = " << s9 << endl;
+
         // assing() sets an existing string constructor-like (many forms)
-        s1.assign(s2, 6, 5);  // String, start, length
-        cout << "s1 = " << s1 << endl;
-    }
-
-    {
-        cout << "\nContainer operations :\n\n";
-
-
+        s3.assign(s2, 6, 5);  // String, start, length
+        cout << "s3 = " << s3 << endl;
     }
 
 
@@ -54,6 +53,9 @@ int main(){
         string s1 = "Take a look to the sky just before you die";
         cout << "s1 = " << s1 << endl;
 
+        cout << "s1.size() = " << s1.size() << endl;
+        cout << "s1.length() = " << s1.length() << endl;
+
         // substr
         cout << "s1.substr() = " << s1.substr() << endl;
         cout << "s1.substr(7) = " << s1.substr(7) << endl;
@@ -62,25 +64,131 @@ int main(){
         //c_str() ; Returns a 0-terminated C string
         // C-string return lives only as long as the string object alive and not modified !!!
         cout << "s1.c_str() = " << s1.c_str() << endl;
+
+        // Get the raw data (might be not 0-terminated !!!)
+        const char * raw = s1.data();
+    }
+
+
+    {
+        cout << "\nContainer operations :\n\n";
+
+        string s = "Who's to say where the wind will take you";
+
+        // Print with a range for
+        for (char c : s)
+            cout << c;
+        cout << endl;
+
+        // Modify with a range for
+        for (char & c : s)
+            c = toupper(c);
+
+        // Print with an iterator
+        for (auto it = s.cbegin(); it != s.cend(); ++it)
+            cout << *it;
+        cout << endl;
+
+        // All algorithms can be used on strings
+        // Sort
+        sort(s.begin(), s.end());
+        cout << s << endl;
     }
 
     {
-        cout << "\ninsert, delete :\n\n";
+        cout << "\ncapacity, push_back(), reserve :\n\n";
 
-        // string has index-based insert, same syntax ans ctor and assign
+        string s;
+        for (int i = 0; i<65; ++i){
+            cout << "size = " << s.size() << " , capacity = " << s.capacity() << endl;
+            s.push_back('Z');
+        }
+
+        // We get 15, 30, 60, 120 ...
+        // 15 is the local capacity (stored in-place)
+        // If more than 15 chars, we'll need HEAP
+
+        s.reserve(100); // Reserve space
+
+        s.shrink_to_fit(); // Shrink
+        cout << "\nAfter shrink :\n";
+        cout << "s = " << s << endl;
+        cout << "size = " << s.size() << " , capacity = " << s.capacity() << endl;
+
+        s.resize(27);   // Resize
+        cout << "\nAfter resize :\n";
+        cout << "s = " << s << endl;
+        cout << "size = " << s.size() << " , capacity = " << s.capacity() << endl;
+
+        s.clear();
+        cout << "\nAfter clear :\n";
+        cout << "s = " << s << endl;
+        cout << "size = " << s.size() << " , capacity = " << s.capacity() << endl;
+
+
+        s.clear();   // Remove everything, capacity=65 still !
+        cout << "\nAfter clear :\n";
+        cout << "s = " << s << endl;
+        cout << "size = " << s.size() << " , capacity = " << s.capacity() << endl;
+
+        s.shrink_to_fit(); // Shrink again, we get back to size = 0, capacity=15 !
+        cout << "\nAfter shrink :\n";
+        cout << "s = " << s << endl;
+        cout << "size = " << s.size() << " , capacity = " << s.capacity() << endl;
+    }
+
+    {
+        cout << "\ninsert, erase :\n\n";
+
+        // string has index-based insert, same syntax as ctor and assign
         string s1 = "Lucy Liu";
         cout << "s1 = " << s1 << endl;
 
         s1.insert(5, "Alexis ");    // Insert substring before position 5
         cout << "s1 = " << s1 << endl;
 
-        s1.insert(0, "Gorgeous ");    // Insert in the beginning (before 0)
+        s1.insert(0, string("One Gorgeous Two"), 4, 9);    // Insert in the beginning (before 0)
         cout << "s1 = " << s1 << endl;
 
         s1.insert(s1.size(), 3, '!');    // Insert in the end, 3 times '!'
         cout << "s1 = " << s1 << endl;
 
         // Of course, iterator-based insert can be used as well
+        // It only works with char, lists and iterators, no strings!
+        auto pos = s1.begin() + 9;
+        pos = s1.insert(pos, '?') + 1;
+        cout << "s1 = " << s1 << endl;
+
+        string s2(" Deadly ");
+        s1.insert(pos, s2.cbegin(), s2.cend());
+        cout << "s1 = " << s1 << endl;
+
+        s1.erase(0, 18);   // pos, length to delete
+        cout << "s1 = " << s1 << endl;
+
+        pos = s1.begin() + 5;
+        s1.erase(pos, pos + 7);  // Erase with iterators
+        cout << "s1 = " << s1 << endl;
+
+        s1.erase(8);
+        cout << "s1 = " << s1 << endl;
+    }
+
+    {
+        cout << "\n+, +=, append :\n\n";
+
+        string s1 = string("One ") + "Two " + "Three";      // OK
+        cout << "s1 = " << s1 << endl;
+        string s2 = "One " + string("Two ") + "Three";      // OK
+        cout << "s2 = " << s2 << endl;
+        string s3 = "One " + ("Two " + string("Three"));    // OK
+        cout << "s3 = " << s3 << endl;
+//        string s4 = "One " + "Two " + string("Three");      // Error
+//        string s4 = "One " + "Two " + "Three";              // Error
+
+
+        string s = "";
+
 
     }
 
