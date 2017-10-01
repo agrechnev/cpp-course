@@ -6,6 +6,9 @@
 #include <cctype>
 #include <algorithm>
 #include <set>
+
+#include <codecvt>   // for codecvt_utf8
+#include <locale>    // for wstring_convert
 //==============================
 int main(){
     using namespace std;
@@ -255,6 +258,82 @@ int main(){
         const string s3(".,?!;;");  // Search for any of the ".,?!;;" with algorithms
         it = find_first_of(s.cbegin(), s.cend(), s3.cbegin(), s3.cend());
         cout << it - s.cbegin() << endl;
+    }
+
+    {
+         cout << "\nComparing strings :\n\n";
+
+         cout << boolalpha;
+         cout << (string("Mary Ann") == string("Mary Ann")) << endl;      // OK
+         cout << ("Mary Ann" == string("Mary Ann")) << endl;              // OK
+         cout << (string("Mary Ann") == "Mary Ann") << endl;              // OK
+         cout << ("Mary Ann" == "Mary Ann") << endl;       // Compares pointers, not strings !!!
+
+         cout << string("abcd").compare("abce") << endl;   // -1
+         cout << string("abcd").compare("abc") << endl;    // 1
+         // Compare two substrings
+         cout << string("Alpha Two Three Tango")
+                 .compare(6, 9, string("One Two Three Four"), 4, 9) << endl;    // 0
+
+    }
+
+    {
+         cout << "\nNumber-string conversion :\n\n";
+
+         cout << to_string(-17) << endl;
+         cout << to_string(0.123456789) << endl;
+
+         // stoi etc throw invalid_argument or out_of_range
+         cout << stoi("101") << endl;
+
+         size_t st;  // Number of characters read
+         cout << stoi("101", &st) << endl;
+         cout << "st = " << st << endl;
+
+         cout << stoi("101", nullptr, 2) << endl;  // 5, base 2
+         cout << stoi("101", nullptr, 5) << endl;  // 26. base 5
+         cout << stoi("101", nullptr, 8) << endl;  // 65. base 8
+         cout << stoi("101", nullptr, 16) << endl;  // 257. base 16
+
+         // base =0, auto base
+         cout << stoi("101", nullptr, 0) << endl;  // 101, decimal
+         cout << stoi("0101", nullptr, 0) << endl;  // 65, base 8
+         cout << stoi("0x101", nullptr, 0) << endl;  // 257, base 16
+    }
+
+    {
+        cout << "\nUTF-8 and UTF-16 :\n\n";
+
+        cout << "If it doesn't work on windows, try typing 'chcp 65001' in the windows console." << endl;
+        cout << "Or redirect into a file." << endl;
+
+        // Strings can hold UTF-8 and read from/write to streams
+        // Your literals must be UTF-8 !
+        string s1 = "Український текст!";
+        cout << "s1 = " << s1 << endl;
+
+        // UTF-16 to UTF-8 converter object. Ugly, isn't it?
+        wstring_convert<codecvt_utf8_utf16<char16_t>, char16_t> cvt;
+
+        // char16_t :  UTF-16 character
+        // u16string is the type to hold UTF-16 characetrs
+        u16string us1 = cvt.from_bytes(s1);   // Convert UTF-8 to UTF-16 !
+        u16string us2 = u"ЇїЄєҐґÅåÖöÄä";    // UTF-8 string literal converted to UTF-16
+        u16string us3{0x414, 0x456, 0x432, 0x43a, 0x430};   // Numerical UTF-16 values
+        u16string us4{u'Ї', u'ж' , u'а', u' ', u'å', u'ö', u'ä'};   // List of UTF-16 chars
+
+        // You cannot print u16string to cout, first convert to UTF-8 !
+        cout << "us1 = " << cvt.to_bytes(us1) << endl;
+        cout << "us2 = " << cvt.to_bytes(us2) << endl;
+        cout << "us3 = " << cvt.to_bytes(us3) << endl;
+        cout << "us4 = " << cvt.to_bytes(us4) << endl;
+
+        cout << "\nNow iterate over individual characters of us2 :\n";
+
+        for (char16_t c : us2)
+            cout << cvt.to_bytes(c) << "  " << hex <<(int)c << dec << endl;
+
+
     }
     return 0;
 }
