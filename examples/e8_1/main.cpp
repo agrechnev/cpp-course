@@ -5,6 +5,7 @@
 #include <string>
 #include <cctype>
 #include <algorithm>
+#include <set>
 //==============================
 int main(){
     using namespace std;
@@ -175,7 +176,7 @@ int main(){
     }
 
     {
-        cout << "\n+, +=, append :\n\n";
+        cout << "\n+, +=, append(), replace() :\n\n";
 
         string s1 = string("One ") + "Two " + "Three";      // OK
         cout << "s1 = " << s1 << endl;
@@ -187,10 +188,73 @@ int main(){
 //        string s4 = "One " + "Two " + "Three";              // Error
 
 
-        string s = "";
+        string s = "Alpha ";
+        cout << "s = " << s << endl;
 
+        // Append in the end
+        s.append("Beta ");
+        cout << "s = " << s << endl;
+        // Append a substring of a C-string
+        s.append("Gamma Delta ", 6);
+        cout << "s = " << s << endl;
 
+        // += works like append
+        s += "Epsilon ";
+        cout << "s = " << s << endl;
+
+        // Replace works like erase, then insert
+        s.replace(6, 4, "OMEGA");
+        cout << "s = " << s << endl;
     }
 
+    {
+        cout << "\nfind() :\n\n";
+
+        string s("Gorgeous ? Deadly Lucy Alexis Liu!!!");
+        cout << "s = " << s << endl;
+        cout << "s.size() = " << s.size() << endl;
+
+
+        auto result = s.find("Alex");  // string::size_type actually
+        cout << "s.find(\"Alex\") = " << result << endl;
+
+        // Find a substring
+        result = s.find("Alexander", 5);
+        cout << "s.find(\"Alexander\", 5) = " << result << endl;  // npos
+        if (string::npos == result)
+            cout << "Not found !!!" << endl;
+
+        cout << "s.find(\" L\") = " << s.find(" L") << endl;   // Find first
+        cout << "s.rfind(\" L\") = " << s.rfind(" L") << endl; // Find last
+
+        // Find first of characters
+        cout << "s.find_first_of(\".,?!;;\") = " << s.find_first_of(".,?!;;") << endl;
+        // Or last
+        cout << "s.find_last_of(\".,?!;;\") = " << s.find_last_of(".,?!;;") << endl;
+
+        // Find first not of characters
+        cout << "s.find_first_not_of(\".,?!;;\") = " << s.find_first_not_of(".,?!;;") << endl;
+        // Or last
+        cout << "s.find_last_not_of(\".,?!;;\") = " << s.find_last_not_of(".,?!;;") << endl;
+
+
+        cout << "\nALgorithm std::find() :\n";
+        // Algorithm searches work for string but are less convenient
+        auto it = find(s.cbegin(), s.cend(), 'L');  // Function, not method !
+        cout << it - s.cbegin() << endl;
+
+        it = find_if(s.cbegin(), s.cend(), [](char c)->bool{
+            return set<char>{'?','!', '.', ',', ':', ';'}.count(c);
+        });
+        cout << it - s.cbegin() << endl;
+
+        const string s2("Alex");  // Search for Alex with algorithms
+        it = search(s.cbegin(), s.cend(), s2.cbegin(), s2.cend());
+        cout << it - s.cbegin() << endl;
+
+        const string s3(".,?!;;");  // Search for any of the ".,?!;;" with algorithms
+        it = find_first_of(s.cbegin(), s.cend(), s3.cbegin(), s3.cend());
+        cout << it - s.cbegin() << endl;
+    }
     return 0;
 }
