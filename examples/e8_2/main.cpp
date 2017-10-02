@@ -7,7 +7,7 @@
 int main(){
     using namespace std;
     {
-        cout << "\nstring: :\n\n";
+        cout << "\nTime and date: :\n\n";
     }
 
     return 0;
