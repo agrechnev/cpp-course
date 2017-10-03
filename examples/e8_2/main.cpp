@@ -2,9 +2,11 @@
 // Created by Oleksiy Grechnyev 2017
 
 #include <iostream>
-#include <string>
+#include <thread>
 #include <ratio>
 #include <chrono>
+#include <ctime>
+#include <iomanip>
 
 using namespace std;
 using namespace std::chrono;
@@ -92,7 +94,56 @@ int main(){
     }
 
     {
-        cout << "\nduration, duration_cast :\n\n";
+        cout << "\nclocks, timing execution :\n\n";
+
+        // How do we time execution? Ge the first time_point
+        auto t1 = high_resolution_clock::now();
+        int result = fun(17);
+        auto t2 = high_resolution_clock::now();  // time_point 2
+        cout << "fun(17) = " << result << endl;
+        nanoseconds dNS = duration_cast<nanoseconds>(t2-t1);
+        using DSeconds = duration<double>;
+        DSeconds dS = duration_cast<DSeconds >(t2-t1);
+        cout << "Timing(nanoseconds) : " << dNS.count() << endl;
+        cout << "Timing(seconds) : " << dS.count() << endl;
+
+        // Sleep for a while
+        cout << "Going to sleep ..." << endl;
+        this_thread::sleep_for(milliseconds(260));
+        cout << "Waking up ..." << endl;
+
+    }
+
+    {
+        cout << "\nC time, printing time :\n\n";
+
+        // time_t is the integer type for time in seconds since epoch (1970)
+        // C time, returns time_t
+        time_t t1 = time(nullptr);
+        cout << "t1 = " << t1 << endl;
+
+        // The same type time_t can be obtained from a C++ time_point
+        system_clock::time_point tP2 = system_clock::now();  // auto is usually used, of course
+        time_t t2 = system_clock::to_time_t(tP2);   // Convert to time_t
+        cout << "t2 = " << t2 << endl;
+
+        cout << "Different ways to print time_t: t1 = " << endl;
+        // Preferred c++ way
+        cout << "put_time(localtime()) : " << put_time(localtime(&t1), "%c %Z") << endl;
+        cout << "put_time(gmtime()) : " << put_time(gmtime(&t1), "%c %Z") << endl;
+        // Old C ways
+        cout << "asctime(localtime()) : " << asctime(localtime(&t1));   // No endl, as asctime gives \n
+        cout << "ctime : " << ctime(&t1);   // Short for asctime(localtime(&t1))
+        cout << "asctime(gmtime()) : " << asctime(gmtime(&t1));
+
+        // tm calendar object
+        tm tM1 = *localtime(&t1);
+        cout << "put_time(&tM1) = " << put_time(&tM1, "%c %Z") << endl;
+        cout << "tM1.tm_year = " << tM1.tm_year << endl;
+        cout << "tM1.tm_mon = " << tM1.tm_mon << endl;
+        cout << "tM1.tm_mday = " << tM1.tm_mday << endl;
+        cout << "tM1.tm_isdst = " << tM1.tm_isdst << endl;
+
     }
 
     return 0;
