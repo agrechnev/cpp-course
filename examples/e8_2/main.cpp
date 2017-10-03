@@ -109,7 +109,7 @@ int main(){
 
         // Sleep for a while
         cout << "Going to sleep ..." << endl;
-        this_thread::sleep_for(milliseconds(260));
+        this_thread::sleep_for(milliseconds(1260));
         cout << "Waking up ..." << endl;
 
     }
@@ -136,14 +136,26 @@ int main(){
         cout << "ctime : " << ctime(&t1);   // Short for asctime(localtime(&t1))
         cout << "asctime(gmtime()) : " << asctime(gmtime(&t1));
 
-        // tm calendar object
-        tm tM1 = *localtime(&t1);
+        cout << "\n\n";
+        
+        // tm calendar structure
+        tm tM1 = *localtime(&t1);     // Copy from static buffer to tM1
         cout << "put_time(&tM1) = " << put_time(&tM1, "%c %Z") << endl;
         cout << "tM1.tm_year = " << tM1.tm_year << endl;
         cout << "tM1.tm_mon = " << tM1.tm_mon << endl;
         cout << "tM1.tm_mday = " << tM1.tm_mday << endl;
+        cout << "tM1.tm_hour = " << tM1.tm_hour << endl;
+        cout << "tM1.tm_min = " << tM1.tm_min << endl;
+        cout << "tM1.tm_sec = " << tM1.tm_sec << endl;
+        cout << "tM1.tm_wday = " << tM1.tm_wday << endl;
+        cout << "tM1.tm_yday = " << tM1.tm_yday << endl;
         cout << "tM1.tm_isdst = " << tM1.tm_isdst << endl;
-
+        
+        // C clock(), time since the program started, usually in milliseconds
+        clock_t c = clock();
+        double cD = 1.0*c/CLOCKS_PER_SEC;
+        cout << "\nThe program ran for " << cD << " seconds" << endl;
+        
     }
 
     return 0;
