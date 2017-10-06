@@ -201,6 +201,14 @@ int main() {
         printOp([&z](int x, int y)->int{
             return z.op(x,y);
         });
+
+        cout << "Fun with mutable lambda : \n";
+        int n = 10;
+        auto lam = [n]() mutable -> void{
+            n += 10;
+            cout << "n = " << n << endl;
+        };
+        lam();
     }
     return 0;
 }
