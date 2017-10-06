@@ -20,6 +20,13 @@ static void printOp2(int (*op)(int, int)) {
 }
 
 //==============================
+/// PrintOp version that uses templates
+template <typename T>
+void printOp3(T op) {
+    cout << "printOp3: op(7, 3) = " << op(7, 3) << endl;
+}
+
+//==============================
 // various operations we can try
 static int add(int x, int y) {
     return x + y;
@@ -52,6 +59,10 @@ int main() {
         printOp(&add);
         printOp2(add);
         printOp2(&add);
+
+        // printOp3 is fine too
+        printOp3(add);
+        printOp3(&add);
 
         // Now let's try variables
         cout << "mul (variables):\n";
@@ -98,6 +109,11 @@ int main() {
             return x + y;
         });
 
+        cout << "Lambda auto add (C++ 14) : \n";
+        printOp([](auto x, auto y){
+            return x + y;
+        });
+
         cout << "Capture by value: add + 17 :\n";
         // Lambdas are stored in auto, since capture class has no name
         int p = 17;
@@ -122,12 +138,31 @@ int main() {
         p = 3;
         printOp(lamMul);  // Value p=3 is used because of the ref capture !
 
+        cout << "Emulate lambda with a functor (add + 3) :\n";
+        struct {
+            int pCap; // Parameter
+            int operator()(int x, int y) {
+                return x + y + pCap;
+            }
+        } functor{p};  // pCap captures p by value
+        printOp(functor);
+
         // Now the init capture !
         // I wanted to show unique_ptr, but it doesn't work std::function !!!
         // std::function needs lambda to be copyable, and unique_ptr is not !
         cout << "Init capture mul* 2 :\n";
         printOp([z = p - 1](int x, int y)->int{
             return x * y * z;
+        });
+        // By ref also work !
+        printOp([&z = p](int x, int y)->int{
+            return x * y * z;
+        });
+
+        // Let's try unique_ptr anyway, works only with printOp3 (template version)
+        auto uI = make_unique<int>(3);
+        printOp3([u = move(uI)](int x, int y)->int{
+            return x * y * *u;
         });
     }
 
@@ -156,6 +191,10 @@ int main() {
 
         Z z{20};  // Create an object with  p = 20
 //        printOp(z.op);   // This does not work !
+
+        // Class methods have invisible first argument this :
+        function<int(Z*, int, int)> funny = Z::op; // This works !
+
         // You have to use bind or lambda wrapper (preferred !)
         // Note the hidden 1st argument, which is this (&z) !
         printOp(bind(Z::op, &z, placeholders::_1, placeholders::_2));
