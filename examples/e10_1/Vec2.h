@@ -2,6 +2,8 @@
 
 #include <iostream>
 #include <iomanip>
+#include <string>
+#include <stdexcept>
 #include <cmath>
 
 // Note: noexcept is always a good idea unless you expect exceptions
@@ -15,15 +17,19 @@ class Vec2{
     friend std::istream & operator>> (std::istream & is, Vec2 & v);
     friend bool operator<(const Vec2 & lhs, const Vec2 & rhs) noexcept ;
 
-public: //===== Ctors
+public: //===== Methods
     /// xy ctor
     Vec2(double x, double y) : x(x), y(y) {}
 
     /// Default ctor
     Vec2() = default;
 
-public: //===== Getters, setters
+    /// Length of a vector
+    double len(){
+        return std::sqrt(x*x + y*y);
+    }
 
+    // Getters, setters
     double getX() const {
         return x;
     }
@@ -87,9 +93,39 @@ public: //====== Member operators
         --*this;  // Or call prefix like this
         return temp; // Return the copy
     }
-    // Function-call operator (not needed for Vec2, just for fun)
-    void operator()(const string &s) {
+    // The [] operator, we need both const and non-const version
+    double & operator[] (int i){
+        switch (i) {
+        case 0:
+            return x;
+        case 1:
+            return y;
+        default:
+            throw std::out_of_range("Vec2::operator[]");
+        }
+    }
+    // Could have returned double by value here, but let's show the classical way
+    const double & operator[] (int i) const {
+        switch (i) {
+        case 0:
+            return x;
+        case 1:
+            return y;
+        default:
+            throw std::out_of_range("Vec2::operator[] const");
+        }
+    }
+    // Function-call operator (not needed for Vec2, just for fun), prints stuff
+    void operator()(const std::string &s) noexcept  {
         std::cout << s << *this << std::endl;
+    }
+    // Cast to double
+    explicit operator double() noexcept {
+        return len();
+    }
+    // Cast to bool (explicit works in if, ?:)
+    explicit operator bool() noexcept {
+        return x || y;
     }
 
 private: //===== Data

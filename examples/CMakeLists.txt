@@ -50,3 +50,4 @@ add_subdirectory(e9_1)
 add_subdirectory(e9_2)
 
 add_subdirectory(e10_1)
+add_subdirectory(e10_2)

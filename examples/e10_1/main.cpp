@@ -1,6 +1,7 @@
 // Example 10.1 Operator overloading : class Vec2
 
 #include <iostream>
+#include <string>
 
 #include "./Vec2.h"
 
@@ -87,6 +88,40 @@ int main() {
         // Finally, the unary minus
         c = -c;   // 1  2
         cout << "c = " << c << endl;
+    }
+
+    {
+        cout << "\nVec2 exotics :\n\n";
+        Vec2 a(-13, -666), b(0,0);
+
+        a("A Terrible Evil Vector :");  // Function call (string arg)
+
+        // operator[] non-const
+        a[0] = -4;
+        a[1] = 3;
+//        a[2] = 3;  // throws out_of_range
+
+        // operator[] const
+        const Vec2 & cA = a;
+        cout << "cA[0] = " << cA[0] << ", cA[1] = " << cA[1] << endl;
+
+        // Length, operator double
+        // operator double is explicit, explicit casts only !
+        cout << "a.len() = " << a.len() << endl;   // As method
+        cout << "(double)a = " << (double)a << endl;   // As explicit cast
+        cout << "static_cast<double>(a) = " << static_cast<double>(a) << endl;
+        // double d = a; // Does not work, as operator double is explicit
+
+        // operator bool
+        // Works in if and ?: even though it's explicit
+        if (a)
+            cout << "a is not zero" << endl;
+        else
+            cout << "a is zero" << endl;
+
+        cout << (b ? "b is not zero" : "b is zero") << endl;
+        // bool myBool = a;  // Error, operator bool is explicit
+        bool myBool = (bool)a;  // OK
     }
     return 0;
 }
