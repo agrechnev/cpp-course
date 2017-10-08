@@ -6,6 +6,7 @@
 /// Stores an int data in the heap using new, delete
 class IntBox{
     friend std::ostream & operator<<(std::ostream & os, const IntBox & ib) noexcept;
+    friend void swap(IntBox &lhs, IntBox &rhs) noexcept;
 public:
     /// Empty Ctor
     IntBox() {
@@ -72,9 +73,11 @@ public:
 
     /// Move assignment
     IntBox & operator=(IntBox && rhs) {
-        clear(); // Clear self first
-        data = rhs.data;  // Copy the pointer
-        rhs.data = nullptr;  // Set rhs to empty without delete
+        if (this != &rhs) { // Check for self-assign
+            clear(); // Clear self first
+            data = rhs.data;  // Copy the pointer
+            rhs.data = nullptr;  // Set rhs to empty without delete
+        }
         std::cout << "Move assign : " << dataStr() << std::endl;
         return *this;
     }
@@ -89,9 +92,11 @@ public:
 
     /// Copy assignment : Deep Clone
     IntBox & operator=(const IntBox & rhs) {
-        clear(); // Clear self first
-        if (rhs.data) { // If rhs is not empty
-            data = new int(*rhs.data);  // Deep clone the heap object
+        if (this != &rhs) { // Check for self-assign
+            clear(); // Clear self first
+            if (rhs.data) { // If rhs is not empty
+                data = new int(*rhs.data);  // Deep clone the heap object
+            }
         }
         std::cout << "Copy assign : " << dataStr() << std::endl;
         return *this;
@@ -114,4 +119,10 @@ private:
 std::ostream & operator<<(std::ostream & os, const IntBox & ib) noexcept {
     os << ib.dataStr();
     return os;
+}
+
+/// Efficient swap
+void swap(IntBox &lhs, IntBox &rhs) noexcept {
+    using std::swap;
+    swap(lhs.data, rhs.data); // Swap pointers
 }

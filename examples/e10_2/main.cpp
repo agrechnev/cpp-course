@@ -54,6 +54,8 @@ int main(){
         b = e;
         e.setValue(42); // And change e
 
+        e = e; // Check self-assignment
+
         cout << "a = " << a << ", b = " << b << ", c = " << c << ", d = " << d << ", e = " << e << endl;
 
         a = c;  // Copy assign empty
@@ -72,6 +74,15 @@ int main(){
 
         a = move(c); // Move assignment, moves c back to a
         b = IntBox(42); // Move assignment of a temp
+
+        // Check the correct self-assignment
+        b = move(b);
+
+        cout << "a = " << a << ", b = " << b << ", c = " << c << ", d = " << d << endl;
+
+        // Try swap
+        swap(a, b);
+        swap(c, d);
 
         cout << "a = " << a << ", b = " << b << ", c = " << c << ", d = " << d << endl;
     }
