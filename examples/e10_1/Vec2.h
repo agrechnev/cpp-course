@@ -151,7 +151,7 @@ inline bool operator!=(const Vec2 & lhs, const Vec2 & rhs)  noexcept {
 }
 //------------------------------------------------------
 // <<, >> with io streams
-// Here I don't use noexcept as io steams might throw
+// Here I don't use noexcept as io streams might throw
 inline std::ostream & operator<< (std::ostream & os, const Vec2 & v){
     os << std::setw(10) << v.x << " " << std::setw(10) << v.y;  // No endl !
     return os;
