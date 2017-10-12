@@ -12,7 +12,7 @@ add_subdirectory(liba)
 # Search for header files (a.h) in liba
 include_directories(liba)  
 
-# Build libarry b : in this directory
+# Build library b : in this directory
 # For real projects better use separate directories !
 set(SRCS_B
     B.cpp

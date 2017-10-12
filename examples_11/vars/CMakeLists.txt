@@ -3,54 +3,32 @@ project(hello)    # Project title
 # Language version required: C++ 14. Sets a variable !
 set(CMAKE_CXX_STANDARD 14)
 
-# Fun with set() and message()
-message("Hello world !")
-message("CMAKE_CXX_STANDARD = ${CMAKE_CXX_STANDARD}")   # CMAKE_CXX_STANDARD = 14
-message(${CMAKE_CXX_STANDARD})  # 14
+# Set options
+option(WITH_DRAGONS "Any dragons in our story ?" OFF)
+option(WITH_ELVES "Any elves in our story ?" OFF)
+option(WITH_ORCS "Any orcs in our story ?" ON)
 
-# math(), result is set to cariable c
-message("CMake and arithmetics :")
-math(EXPR c "5*(10+13) + 7")
-message("5*(10+13) + 7 = ${c}")
+# Some Variables
+message("Variables :")
+message("CMAKE_BUILD_TYPE = ${CMAKE_BUILD_TYPE}")
+message("CMAKE_GENERATOR = ${CMAKE_GENERATOR}")
+message("WITH_MAGIC = ${WITH_MAGIC}")
+message("WITH_DRAGONS = ${WITH_DRAGONS}")
+message("WITH_ELVES = ${WITH_ELVES}")
+message("WITH_ORCS = ${WITH_ORCS}")
 
-# if()
-message("if()")
-set(n 15)
-if(n GREATER 10)
-	message("${n} > 10")
-else()
-	message("${n} < 10")
+# Pass definition to C++ using add_definition()
+if(DEFINED WITH_DRAGONS)
+ add_definitions(-DWITH_DRAGONS=${WITH_DRAGONS})
 endif()
 
-#while
-message("while()")
-set(n 1)
-while(n LESS_EQUAL 10)
-	message(${n})
-	math(EXPR n "${n}+1")
-endwhile()
+# Pass definitions to C++ using configure_file()
+configure_file(config.h.in config.h)
+include_directories("${PROJECT_BINARY_DIR}")    # To find config.h
 
 # Source files
 set(SRCS 
     hello.cpp
 )
-
-# Some Standard variables
-message("Useful CMake variables :")
-message("CMAKE_BINARY_DIR = ${CMAKE_BINARY_DIR}")
-message("CMAKE_SOURCE_DIR = ${CMAKE_SOURCE_DIR}")
-message("CMAKE_BUILD_TYPE = ${CMAKE_BUILD_TYPE}")
-message("CMAKE_CXX_FLAGS = ${CMAKE_CXX_FLAGS}")
-message("CMAKE_CXX_FLAGS_DEBUG = ${CMAKE_CXX_FLAGS_DEBUG}")
-message("CMAKE_CXX_FLAGS_RELEASE = ${CMAKE_CXX_FLAGS_RELEASE}")
-message("CMAKE_EXECUTABLE_SUFFIX = ${CMAKE_EXECUTABLE_SUFFIX}")
-message("CMAKE_SYSTEM = ${CMAKE_SYSTEM}")
-message("CMAKE_SYSTEM_NAME = ${CMAKE_SYSTEM_NAME}")
-message("WIN32 = ${WIN32}")
-message("APPLE = ${APPLE}")
-message("UNIX = ${UNIX}")
-message("MINGW = ${MINGW}")
-
-
 #  Executable created from ${SRCS}
 add_executable(${PROJECT_NAME} ${SRCS})

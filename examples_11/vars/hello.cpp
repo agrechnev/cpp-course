@@ -1,24 +1,37 @@
-// Example 1_1 : Hello world (sort of)
-// Created by Oleksiy Grechnyev 2017
-
-// This is a comment
-/* This is also a comment */
-
-// Include the header file iostream (needed for file Input/Output)
-// This is NOT called 'import' or 'add library' !!!
 #include <iostream>
 
-/*
- The main() function is the program entry point
- it can also be declared as main(int argc, char **argv) 
- returns int value, 0 for correct exit, 1 for error
- */
+#include "config.h"
+
+// Some preprocessor magic to convert defines into string, two macros are needed for some reason
+#define STR1(x) #x
+#define STR(x) STR1(x)
+
 int main(){
-    // cout (standard output stream) and
-    // endl (End of line) are members of namespace std
-    // They are defined in the header iostream
-    std::cout << "Carthago delenda est." << std::endl;
+    using namespace std;
     
-    // Return 0 = OK
+    // Print variables
+    
+    // cout << "BRIANNA = " << STR(BRIANNA) << endl;
+    
+#ifdef WITH_MAGIC
+    cout << "WITH_MAGIC = " << STR(WITH_MAGIC) << endl;
+#endif
+    
+#ifdef WITH_DRAGONS
+    cout << "WITH_DRAGONS = " << STR(WITH_DRAGONS) << endl;
+#endif
+    
+#ifdef WITH_ELVES
+    cout << "WITH_ELVES = " << STR(WITH_ELVES) << endl;
+#endif
+    
+#ifdef WITH_ORCS
+    cout << "WITH_ORCS = " << STR(WITH_ORCS) << endl;
+#endif
+       
+#ifdef NDEBUG
+    cout << "NDEBUG = " << STR(NDEBUG) << endl;
+#endif
+    
     return 0;
 }

@@ -31,11 +31,6 @@ while(n LESS_EQUAL 10)
 	math(EXPR n "${n}+1")
 endwhile()
 
-# Source files
-set(SRCS 
-    hello.cpp
-)
-
 # Some Standard variables
 message("Useful CMake variables :")
 message("CMAKE_BINARY_DIR = ${CMAKE_BINARY_DIR}")
