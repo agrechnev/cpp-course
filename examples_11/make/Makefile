@@ -5,7 +5,7 @@ LIBS =
 OBJS = main.o a.o B.o
 DEPS = a.h B.h
 
-.PHONY:
+.PHONY: all
 all: example
 
 example : $(OBJS)
@@ -14,7 +14,7 @@ example : $(OBJS)
 %.o : %.cpp $(DEPS)
 	$(CXX) $(CXXFLAGS) -o $@ -c $<
 
-.PHONY:
+.PHONY: clean
 clean:
 	-rm *.o example
 	-del *.o example.exe

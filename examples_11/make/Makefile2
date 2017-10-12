@@ -2,7 +2,7 @@ CXX = g++
 CXXFLAGS = -Wall -g
 LIBS = 
 
-.PHONY:
+.PHONY: all
 all: example
 
 example : main.o a.o B.o
@@ -17,7 +17,7 @@ a.o : a.cpp a.h
 B.o : B.cpp B.h
 	$(CXX) $(CXXFLAGS) -c $<
 
-.PHONY:
+.PHONY: clean
 clean:
 	-rm *.o example
 	-del *.o example.exe
