@@ -13,15 +13,17 @@ using namespace std::chrono;
 //==============================
 int main() {
 
-    // Standard lambda which prints a char and sleeps a bit
+    // Print a char and sleep a bit (100 times)
     auto lamChar = [](char c)->void{
+        // Print the thread id at the start
+        cout << this_thread::get_id() << " : starting !\n";
         for (int i = 0; i< 100; ++i) {
             cout << c;
             this_thread::sleep_for(milliseconds(1)); // Sleep a bit
         }
     };
 
-    // THis version uses yield
+    // This version uses yield
     auto lamChar2 = [](char c)->void{
         for (int i = 0; i< 100; ++i) {
             cout << c;
@@ -88,7 +90,7 @@ int main() {
         cout << "After get() ..." << endl;
 
         cout << "\nTwo tasks in parallel ..." << endl;
-        // Running two tasks in parallel
+        // Run 2 tasks in parallel
         future<void> fA = async(launch::async, lamChar, 'A');
         future<void> fB = async(launch::async, lamChar, 'B');
         future<void> fC = async(launch::deferred, lamChar, 'C');  // This one will never start, no get/wait !
@@ -180,7 +182,7 @@ int main() {
 
         cout << "About to join threads ..." << endl;
         // Join threads, means : wait for them to finish
-        tA.join();
+        tA.join();   // Join tA, tB, t0, but not tC !
         tB.join();
         t0.join();
         // We do not join tC, it's detached, it's better NOT to detatch
@@ -191,13 +193,13 @@ int main() {
         cout << "\nthread : future, promise, packaged_task :\n\n";
         // The really low-level way: make future out of a promise
         cout << "promise\n";
-        promise<int> p1;
+        promise<int> p1;  // Create a promise/future pair
         future<int> f1 = p1.get_future();
-        // Now we start the thread, capture promise by ref
+        // Now we start the thread, capturing promise by ref
         thread t1([&p1](int x, int y)->void{
             p1.set_value(x*y);  // We use set_value() on promise instead of return !!!
         }, 3, 7);
-        // Now we get() on the future as usual
+        // Now we run get() on the future as usual
         cout << "f1.get() = " << f1.get() << endl;
         t1.join();  // Don't forget to join, before or after get(), doesn't really matter
 

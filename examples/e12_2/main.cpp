@@ -6,6 +6,7 @@
 #include <vector>
 #include <chrono>
 #include <thread>
+#include <atomic>
 #include <mutex>
 #include <condition_variable>
 
@@ -14,6 +15,61 @@ using namespace std::chrono;
 
 //==============================
 int main() {
+    {
+        cout << "\nData race :\n\n";
+        int result = 0;
+        auto lam = [&result]{
+          for (int i=0; i < 10000; ++i) {
+              ++result;
+          }
+        };
+        vector <thread> v;
+        for (int i=0; i < 100; ++i)
+            v.emplace_back(lam);
+        for (auto & t : v)
+            t.join();
+        cout << "The result should be 1000000 (one million), but ..." << endl;
+        cout << "result = " << result << endl;
+    }
+
+    {
+        cout << "\natomic variables :\n\n";
+        // With atomic we get 1 million !
+        atomic<int> result(0);
+        auto lam = [&result]{
+          for (int i=0; i < 10000; ++i) {
+              ++result;
+          }
+        };
+        vector <thread> v;
+        for (int i=0; i < 100; ++i)
+            v.emplace_back(lam);
+        for (auto & t : v)
+            t.join();
+        cout << "The result should be 1000000 (one million), and with atomic<int> ..." << endl;
+        cout << "result = " << result << endl;
+    }
+
+    {
+        cout << "\nmutex :\n\n";
+        // With mutex we get 1 million !
+        int result = 0;
+        mutex m;
+        auto lam = [&result, &m]{
+          for (int i=0; i < 10000; ++i) {
+              lock_guard<mutex> lock(m);
+              ++result;
+          }
+        };
+        vector <thread> v;
+        for (int i=0; i < 100; ++i)
+            v.emplace_back(lam);
+        for (auto & t : v)
+            t.join();
+        cout << "The result should be 1000000 (one million), and with mutex ..." << endl;
+        cout << "result = " << result << endl;
+    }
+
     {
         cout << "\ncondition_variable 1 :\n\n";
 
