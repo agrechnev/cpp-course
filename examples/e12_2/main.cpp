@@ -8,6 +8,7 @@
 #include <thread>
 #include <atomic>
 #include <mutex>
+#include <future>
 #include <condition_variable>
 
 using namespace std;
@@ -126,9 +127,9 @@ int main() {
     {
         cout << "\ncondition_variable 2 :\n\n";
 
-        // Minimal example
+        // Minimal example with condition
         vector <string> data;
-        mutex m;
+        mutex m;      // mutex protects both cv and data
         condition_variable cv;
 
         // This thread prints vector of strings
@@ -165,7 +166,7 @@ int main() {
         // Slightly more complicated example
         // Here the main thread uses the same conditional variable to signal the end of operation
         vector <string> data;
-        mutex m;
+        mutex m;      // mutex protects both cv and data
         condition_variable cv;
         bool finished = false;  // Signal that the job is finished
 
@@ -206,6 +207,30 @@ int main() {
 
         cout << "Now join worker thread ..." << endl;
         worker.join();
+    }
+
+    {
+        cout << "\npromise and future for a one-shot communication :\n\n";
+
+        promise<void> p;   // promise + future pair
+        future<void> f = p.get_future();
+        thread t([&f]{
+            f.get(); // Wait for the signal
+            cout << "One !\n";
+            this_thread::sleep_for(milliseconds(10));
+            cout << "Two !\n";
+            this_thread::sleep_for(milliseconds(10));
+            cout << "Three !\n";
+        });
+
+        for (int i = 0; i < 10; ++i) {
+            cout << i << endl;
+            if (4 == i)
+                p.set_value(); // Send the signal
+            this_thread::sleep_for(milliseconds(10));
+        }
+
+        t.join();
     }
     return 0;
 }
