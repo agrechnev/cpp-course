@@ -47,7 +47,7 @@ int main() {
         for (auto & t : v)
             t.join();
         cout << "The result should be 1000000 (one million), and with atomic<int> ..." << endl;
-        cout << "result = " << result << endl;
+        cout << "result = " << result.load() << endl;
     }
 
     {
@@ -57,9 +57,9 @@ int main() {
         mutex m;
         auto lam = [&result, &m]{
           for (int i=0; i < 10000; ++i) {
-              lock_guard<mutex> lock(m);
+              lock_guard<mutex> lock(m);        // Lock until '}'
               ++result;
-          }
+          }  // Unlock here
         };
         vector <thread> v;
         for (int i=0; i < 100; ++i)
@@ -71,9 +71,29 @@ int main() {
     }
 
     {
+        cout << "\nThread interaction : flag\n\n";
+
+        atomic<bool> stop(false);
+        auto lam = [&stop]{
+            int i = 0;
+            while (!stop) {
+                cout << i++;
+                this_thread::sleep_for(milliseconds(50));
+            }
+        };
+        thread t1(lam), t2(lam);
+        this_thread::sleep_for(milliseconds(500));
+        stop = true;   // Signal stop
+        t1.join();
+        t2.join();
+        cout << endl;
+    }
+
+    {
         cout << "\ncondition_variable 1 :\n\n";
 
         // Minimal example
+        // Dangerous ! Spurious wakeup can happen !!!
         vector <string> data;
         mutex m;
         condition_variable cv;
