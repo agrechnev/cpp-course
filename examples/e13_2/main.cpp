@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <type_traits>
 
 using namespace std;
 //==============================
@@ -46,6 +47,44 @@ void printSq(const Args & ... args){
     print(square(args)...);
 }
 
+// A simple ostream impementation of printf
+template <typename...  Params>
+void printfCPP(std::ostream & os, const std::string & fmt, Params... p) {
+    constexpr size_t SIZE = 1000;
+    static char buffer[SIZE];  // Hidden global buffer = ugly
+    std::snprintf(buffer, SIZE, fmt.c_str(), p...);
+    os << buffer;
+}
+
+//==============================
+// Advanced
+
+/// Compile-time factorial from Wikipedia
+// Induction
+template <int N>
+struct Factorial {
+  static const int value = N * Factorial<N - 1>::value;
+};
+// Base case via template specialization:
+template <>
+struct Factorial<0> {
+  static const int value = 1;
+};
+
+/// Print value or pointer
+template<typename T>
+void katanaImpl(const T & val, true_type){   // Pointer
+    cout << "Pointer : " << val << " , *val = "<< *val << endl;
+}
+template<typename T>
+void katanaImpl(const T & val, false_type){   // Not Pointer
+    cout << "Value : " << val << endl;
+}
+template<typename T>
+void katana(const T & val){
+    katanaImpl(val, is_pointer<T>());  // true_type or false_type
+}
+
 //==============================
 // main() 
 //==============================
@@ -64,6 +103,20 @@ int main() {
 
         cout << "\nprintSq() :\n";
         printSq(1, 2, 3.14159);
+
+        printfCPP(cout, "%s : %d * %d = %d\n", "Hello", 3, 7, 3*7);
+    }
+
+    {
+        cout << "\nAdvanced templates aka metaprogramming : \n\n";
+
+        cout << "Factorial<5>::value = " << Factorial<5>::value << endl;
+
+        cout << "\nkatana():\n";
+        int i = 17;
+        katana(19);
+        katana(i);
+        katana(&i); // Pointer
     }
     return 0;
 }
