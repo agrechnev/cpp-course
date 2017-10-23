@@ -7,6 +7,9 @@ project(e12_1)
 # Language version required: C++ 14
 set(CMAKE_CXX_STANDARD 14)
 
+# Threads library (needed for Linux)
+find_package(Threads)
+
 # Source files
 set(SRCS
         main.cpp
@@ -14,3 +17,4 @@ set(SRCS
 
 #  Executable created from ${SRCS}
 add_executable(${PROJECT_NAME} ${SRCS})
+target_link_libraries(${PROJECT_NAME} ${CMAKE_THREAD_LIBS_INIT})
