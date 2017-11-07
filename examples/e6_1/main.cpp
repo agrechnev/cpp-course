@@ -25,7 +25,7 @@ unique_ptr<Tjej> factory1(const string & name){
 // Factory (source) function example 2 : the same
 unique_ptr<Tjej> factory2(const string & name){
     unique_ptr<Tjej> upT = make_unique<Tjej>(name);
-    return move(upT);  // Will work without move also
+    return upT;  // Will work without move also
 }
 //==============================
 // Sink (consumer) example which destroys a unique_ptr<Tjej> object
